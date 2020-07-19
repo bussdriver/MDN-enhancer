@@ -6,6 +6,8 @@
 // @version     1.0
 // @author      John Bussjaeger
 // @description 7/17/2020, 7:24:01 PM
+// @homepageURL https://github.com/bussdriver/MDN-enhancer
+// @downloadURL https://raw.githubusercontent.com/bussdriver/MDN-enhancer/master/MDN%20Search%20Filtering.js
 // ==/UserScript==
 
 var filters=    ["api","addons","css","canvas","firefox","firefox-os","games","html","http","js","marketplace","mathml","mobile","apps","svg","webdev","standards","webext","webgl","docs","xpcom","xul"];

@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://developer.mozilla.org/*
 // @grant       none
-// @version     1.0
+// @version     1.1
 // @author      John Bussjaeger
 // @description 7/17/2020, 7:24:01 PM
 // @homepageURL https://github.com/bussdriver/MDN-enhancer

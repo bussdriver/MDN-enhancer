@@ -3,16 +3,18 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://developer.mozilla.org/*
 // @grant       none
-// @version     1.1
+// @version     1.2
 // @author      John Bussjaeger
 // @description 7/17/2020, 7:24:01 PM
 // @homepageURL https://github.com/bussdriver/MDN-enhancer
 // @downloadURL https://raw.githubusercontent.com/bussdriver/MDN-enhancer/master/MDN%20Search%20Filtering.js
 // ==/UserScript==
 
-var filters=    ["api","addons","css","canvas","firefox","firefox-os","games","html","http","js","marketplace","mathml","mobile","apps","svg","webdev","standards","webext","webgl","docs","xpcom","xul"];
+var filters=    ["all","api","addons","css","canvas","firefox","firefox-os","games","html","http","js","marketplace","mathml","mobile","apps","svg","webdev","standards","webext","webgl","docs","xpcom","xul"];
 var localized=  {//map to filters + url + url_title
-    'en':["APIs and DOM","Add-ons & Extensions","CSS","Canvas","Firefox","Firefox OS","Games","HTML","HTTP","JavaScript","Marketplace","MathML","Mobile","Open Web Apps","SVG","Web Development","Web Standards","WebExtensions","WebGL","Writing Documentation","XPCOM","XUL","Search Topics","http://kb.mozillazine.org/Using_keyword_searches","Keyword Searching"]
+    'en':["All"//special case
+     ,"APIs and DOM","Add-ons & Extensions","CSS","Canvas","Firefox","Firefox OS","Games","HTML","HTTP","JavaScript","Marketplace","MathML","Mobile","Open Web Apps","SVG","Web Development","Web Standards","WebExtensions","WebGL","Writing Documentation","XPCOM","XUL"
+    ,"Search Topics","http://kb.mozillazine.org/Using_keyword_searches","Keyword Searching"]
 };
 localized=      localized[ navigator.language ] || localized[ navigator.language.split('-')[0] ] || localized.en;
 
@@ -30,10 +32,11 @@ var fset=       document.createElement('fieldset');
 fset.className= "search-results-filters";
 fset.style.display= "none";
 var legend=     document.createElement('b');
-legend.appendChild(document.createTextNode( localized[localized.length-3] ));
+legend.appendChild(document.createTextNode( localized[localized.length-3] ));// "search topics"
 fset.appendChild(legend);
 
-var empty=      (location+'').indexOf('topic=') === -1;
+var checklist=  [];
+var all;
 for(var item,check,x,i=0;i<filters.length;++i){
     x=          filters[i];
     item=       document.createElement('label');
@@ -41,8 +44,32 @@ for(var item,check,x,i=0;i<filters.length;++i){
     check.type= "checkbox";
     check.name= "topic";
     check.value=    x;
-    if( empty || (location+'').indexOf('topic='+x) >=0 ){
+    if( (location+'').indexOf('topic='+x) >=0 ){
         check.checked=  true;
+    }
+    check.addEventListener('click',function(e){
+        e.target.focus();//click should focus so submit can work
+    },false);
+    if(x==='all'){//"all" special case
+        all=    check;
+        check.name='';
+        if(  (location+'').indexOf('topic=') === -1 ){
+             check.checked=  true;
+        }
+        check.addEventListener('change',function(e){
+            if( e.target.checked ){
+                for(var i=checklist.length;--i>=0;){
+                    checklist[i].checked=false;
+                }
+            }
+        },false);
+    }else{
+        checklist.push(check);
+        check.addEventListener('change',function(e){
+            if( e.target.checked ){
+                all.checked=    false;
+            }
+        },false);
     }
     item.appendChild(check);
     item.appendChild(document.createTextNode(" "+ localized[i]));
@@ -53,8 +80,8 @@ item = document.createElement('hr');
 fset.appendChild(item);
 
 item = document.createElement('a');
-item.innerText=     localized[localized.length-1];
-item.href=          localized[localized.length-2];
+item.innerText=     localized[localized.length-1];// "keyword searching"
+item.href=          localized[localized.length-2];// url help on keyword searching
 fset.appendChild(item);
 
 form.appendChild(fset);

@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://developer.mozilla.org/*
 // @grant       none
-// @version     1.2
+// @version     1.3
 // @author      John Bussjaeger
 // @description 7/17/2020, 7:24:01 PM
 // @homepageURL https://github.com/bussdriver/MDN-enhancer
@@ -24,9 +24,11 @@ var input=      document.getElementById('main-q');
 
 //CSS
 var style=      getComputedStyle(form);
-document.styleSheets[0].insertRule('.search-results-filters {position: absolute;left:calc( '+ ( style.borderBottomLeftRadius ? style.borderBottomLeftRadius : style.paddingLeft +' + '+ style.borderLeftWidth +' + '+ style.borderLeftWidth )  +' );top: calc( '+ style.height +' - '+ style.borderBottomWidth +' );border:inherit;border-bottom-left-radius: inherit;border-bottom-right-radius: inherit;background-color: #fff;padding: 8px;z-index:9;}',0);
-document.styleSheets[0].insertRule('.search-results-filters label {display:block;padding-bottom:10px;}',0);
-document.styleSheets[0].insertRule('.page-header {z-index:1;}',0);
+var x=          document.createElement('style');
+document.head.appendChild(x);
+x.innerHTML=    '.search-results-filters {position: absolute;left:calc( '+ ( style.borderBottomLeftRadius ? style.borderBottomLeftRadius : style.paddingLeft +' + '+ style.borderLeftWidth +' + '+ style.borderLeftWidth )  +' );top: calc( '+ style.height +' - '+ style.borderBottomWidth +' );border:inherit;border-bottom-left-radius: inherit;border-bottom-right-radius: inherit;background-color: #fff;padding: 8px;z-index:9;}'
++'\n.search-results-filters label {display:block;padding-bottom:10px;}'
++'\n.page-header,.main-nav {z-index:1;}';
 
 var fset=       document.createElement('fieldset');
 fset.className= "search-results-filters";
@@ -37,7 +39,7 @@ fset.appendChild(legend);
 
 var checklist=  [];
 var all;
-for(var item,check,x,i=0;i<filters.length;++i){
+for(var item,check,i=0;i<filters.length;++i){
     x=          filters[i];
     item=       document.createElement('label');
     check=      document.createElement('input');

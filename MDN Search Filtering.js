@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://developer.mozilla.org/*
 // @grant       none
-// @version     1.3
+// @version     1.4
 // @author      John Bussjaeger
 // @description 7/17/2020, 7:24:01 PM
 // @homepageURL https://github.com/bussdriver/MDN-enhancer
@@ -26,9 +26,18 @@ var input=      document.getElementById('main-q');
 var style=      getComputedStyle(form);
 var x=          document.createElement('style');
 document.head.appendChild(x);
-x.innerHTML=    '.search-results-filters {position: absolute;left:calc( '+ ( style.borderBottomLeftRadius ? style.borderBottomLeftRadius : style.paddingLeft +' + '+ style.borderLeftWidth +' + '+ style.borderLeftWidth )  +' );top: calc( '+ style.height +' - '+ style.borderBottomWidth +' );border:inherit;border-bottom-left-radius: inherit;border-bottom-right-radius: inherit;background-color: #fff;padding: 8px;z-index:9;}'
-+'\n.search-results-filters label {display:block;padding-bottom:10px;}'
-+'\n.page-header,.main-nav {z-index:1;}';
+x.innerHTML=    '.search-results-filters {position: absolute;left:calc( '+ ( style.borderBottomLeftRadius ? style.borderBottomLeftRadius : style.paddingLeft +' + '+ style.borderLeftWidth +' + '+ style.borderLeftWidth )  +' );top: calc( '+ style.height +' - '+ style.borderBottomWidth +' );'
++`position: absolute;border:inherit;border-bottom-left-radius: inherit;border-bottom-right-radius: inherit;background-color: #fff;padding: 8px;border-top-width:0;z-index:9;}
+.search-results-filters label {display:block;padding-bottom:10px;}
+.page-header {z-index:9;}
+@media all and (min-width:47.9385em) and (max-width: 74.9375em) {
+	.page-header .main-nav {grid-row:1/1;grid-column:2/3;}
+	.page-header .header-search {grid-row:2/2;grid-column:2/3;}
+}
+@media all and (max-width:47.9375em) {
+	.search-results-filters{top:calc(1.6em + 22px);border:thin solid #000;}
+}`
+;
 
 var fset=       document.createElement('fieldset');
 fset.className= "search-results-filters";

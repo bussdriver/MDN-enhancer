@@ -5,7 +5,7 @@
 // @grant       none
 // @version     1.4
 // @author      John Bussjaeger
-// @description 7/17/2020, 7:24:01 PM
+// @description Restores search topic filtering to MDN; for much better search results!
 // @homepageURL https://github.com/bussdriver/MDN-enhancer
 // @downloadURL https://raw.githubusercontent.com/bussdriver/MDN-enhancer/master/MDN%20Search%20Filtering.js
 // ==/UserScript==

@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://developer.mozilla.org/*
 // @grant       none
-// @version     1.4
+// @version     1.5
 // @author      John Bussjaeger
 // @description Restores search topic filtering to MDN; for much better search results!
 // @homepageURL https://github.com/bussdriver/MDN-enhancer
@@ -19,15 +19,15 @@ var localized=  {//map to filters + url + url_title
 localized=      localized[ navigator.language ] || localized[ navigator.language.split('-')[0] ] || localized.en;
 
 //existing document elements:
-var form=       document.getElementById('nav-main-search');
+var form=       document.getElementById('nav-main-search') || document.querySelector('form.search-form');
 var input=      document.getElementById('main-q');
 
 //CSS
 var style=      getComputedStyle(form);
 var x=          document.createElement('style');
 document.head.appendChild(x);
-x.innerHTML=    '.search-results-filters {position: absolute;left:calc( '+ ( style.borderBottomLeftRadius ? style.borderBottomLeftRadius : style.paddingLeft +' + '+ style.borderLeftWidth +' + '+ style.borderLeftWidth )  +' );top: calc( '+ style.height +' - '+ style.borderBottomWidth +' );'
-+`position: absolute;border:inherit;border-bottom-left-radius: inherit;border-bottom-right-radius: inherit;background-color: #fff;padding: 8px;border-top-width:0;z-index:9;}
+var s=			'.search-results-filters {position: absolute;left:calc( '+ ( style.borderBottomLeftRadius ? style.borderBottomLeftRadius : style.paddingLeft +' + '+ style.borderLeftWidth +' + '+ style.borderLeftWidth )  +' );top: calc( '+ style.height +' - '+ style.borderBottomWidth +' );'
++`position: absolute;border:inherit;border-bottom-left-radius: inherit;border-bottom-right-radius: inherit;background-color: #fff;padding: 8px;border-top-width:0;z-index:9;margin:0;}
 .search-results-filters label {display:block;padding-bottom:10px;}
 .page-header {z-index:9;}
 @media all and (min-width:47.9385em) and (max-width: 74.9375em) {
@@ -36,9 +36,14 @@ x.innerHTML=    '.search-results-filters {position: absolute;left:calc( '+ ( sty
 }
 @media all and (max-width:47.9375em) {
 	.search-results-filters{top:calc(1.6em + 22px);border:thin solid #000;}
-}`
-;
-
+}`;
+if( style.borderTopStyle === 'none' ){
+	var y=		getComputedStyle(input);
+	s+=			'\n.search-results-filters {border:'+
+		y.borderTopStyle + ' '+ y.borderTopWidth +' '+ y.borderTopColor
+	+';}';
+}
+x.innerHTML=	s;
 var fset=       document.createElement('fieldset');
 fset.className= "search-results-filters";
 fset.style.display= "none";
